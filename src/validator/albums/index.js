@@ -1,8 +1,8 @@
 import AlbumPayloadSchema from './schema.js'
 import InvariantError from '../../exceptions/InvariantError.js'
 
-const NotesValidator = {
-  validateNotePayload: (payload) => {
+const AlbumsValidator = {
+  validateAlbumPayload: (payload) => {
     const validationResult = AlbumPayloadSchema.validate(payload)
 
     if (validationResult.error) {
@@ -11,4 +11,4 @@ const NotesValidator = {
   }
 }
 
-export default NotesValidator
+export default AlbumsValidator
