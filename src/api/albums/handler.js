@@ -23,7 +23,7 @@ class AlbumsHandler {
         albumId
       }
     })
-    response.code = 201
+    response.code(201)
     return response
   }
 }
