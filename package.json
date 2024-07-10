@@ -7,8 +7,11 @@
     "test": "test"
   },
   "scripts": {
-    "start:dev": "nodemon src/server.js",
-    "test": "newman run test/Open Music API V1 Test.postman_collection.json -e test/OpenMusic API Test.postman_environment.json"
+    "start:prod": "NODE_ENV=production node .",
+    "start:dev": "nodemon .",
+    "test": "newman run test/Open Music API V1 Test.postman_collection.json -e test/OpenMusic API Test.postman_environment.json",
+    "lint": "eslint src",
+    "migrate": "node-pg-migrate"
   },
   "author": "Misyael Yosevian Wiarda",
   "license": "ISC",
