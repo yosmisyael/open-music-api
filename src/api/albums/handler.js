@@ -52,6 +52,17 @@ class AlbumsHandler {
       message: 'Album edited successfully.'
     })
   }
+
+  async deleteAlbumByIdHandler (request, h) {
+    const { id } = request.params
+
+    await this._service.deleteAlbumById(id)
+
+    return h.response({
+      status: 'success',
+      message: 'Album deleted successfully.'
+    })
+  }
 }
 
 export default AlbumsHandler
