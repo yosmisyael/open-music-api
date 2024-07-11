@@ -28,7 +28,22 @@ class AlbumsService {
 
   async getAlbumById (id) {
     const query = {
-      text: 'SELECT * FROM albums WHERE id = $1',
+      text: `
+        SELECT albums.id,
+               albums.name,
+               albums.year,
+               CASE
+                 WHEN EXISTS (SELECT 1 FROM songs WHERE songs."albumId" = albums.id) THEN
+                   json_agg(json_build_object('id', songs.id, 'performer', songs.performer, 'title',
+                                              songs.title))
+                 ELSE
+                   '[]'
+                 END AS songs
+        FROM albums
+               LEFT JOIN songs ON albums.id = songs."albumId"
+        WHERE albums.id = $1
+        GROUP BY albums.id, albums.name, albums.year;
+      `,
       values: [id]
     }
 
