@@ -60,6 +60,17 @@ class SongsHandler {
       message: 'Song updated successfully.'
     })
   }
+
+  async deleteSongByIdHandler (request, h) {
+    const { id } = request.params
+
+    await this._service.deleteSongById(id)
+
+    return h.response({
+      status: 'success',
+      message: 'Song deleted successfully.'
+    })
+  }
 }
 
 export default SongsHandler
