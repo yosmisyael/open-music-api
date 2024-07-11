@@ -45,13 +45,28 @@ const init = async () => {
   server.ext('onPreResponse', (request, h) => {
     const { response } = request
 
-    if (response instanceof ClientError) {
+    if (response instanceof Error) {
+      if (response instanceof ClientError) {
+        const newResponse = h.response({
+          status: 'fail',
+          message: response.message
+        })
+
+        newResponse.code(response.statusCode)
+
+        return newResponse
+      }
+
+      if (!response.isServer) {
+        return h.continue
+      }
+
       const newResponse = h.response({
         status: 'fail',
-        message: response.message
+        message: 'The server has encountered a situation it does not know how to handle.'
       })
 
-      newResponse.code(response.statusCode)
+      newResponse.code(500)
 
       return newResponse
     }
