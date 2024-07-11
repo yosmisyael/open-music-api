@@ -1,6 +1,6 @@
 const routes = (handler) => [
   {
-    method: 'GET',
+    method: 'POST',
     path: '/songs',
     handler: handler.postSongHandler
   }
