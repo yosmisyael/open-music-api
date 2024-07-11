@@ -12,4 +12,16 @@ function mapDBToModel ({
   }
 }
 
-export { mapDBToModel }
+function mapDBToSongsModel ({
+  id,
+  title,
+  performer
+}) {
+  return {
+    id,
+    title,
+    performer
+  }
+}
+
+export { mapDBToModel, mapDBToSongsModel }
