@@ -10,6 +10,6 @@ export const SongPayloadSchema = Joi.object({
 })
 
 export const SongQuerySchema = Joi.object({
-  title: Joi.string().empty(),
-  performer: Joi.string().empty()
+  title: Joi.string().empty(''),
+  performer: Joi.string().empty('')
 })
