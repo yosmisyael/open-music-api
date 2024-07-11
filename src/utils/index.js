@@ -1,4 +1,4 @@
-function mapDBToModel ({
+function mapDBToAlbumsModel ({
   id,
   name,
   year
@@ -24,4 +24,4 @@ function mapDBToSongsModel ({
   }
 }
 
-export { mapDBToModel, mapDBToSongsModel }
+export { mapDBToAlbumsModel, mapDBToSongsModel }

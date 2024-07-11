@@ -2,7 +2,7 @@ import pool from '../config/database.js'
 import { nanoid } from 'nanoid'
 import InvariantError from '../exceptions/InvariantError.js'
 import NotFoundError from '../exceptions/NotFoundError.js'
-import { mapDBToModel } from '../utils/index.js'
+import { mapDBToAlbumsModel } from '../utils/index.js'
 
 class AlbumsService {
   constructor () {
@@ -38,7 +38,7 @@ class AlbumsService {
       throw new NotFoundError('Album not found.')
     }
 
-    return result.rows.map(mapDBToModel)[0]
+    return result.rows.map(mapDBToAlbumsModel)[0]
   }
 
   async editAlbumById (id, { name, year }) {
