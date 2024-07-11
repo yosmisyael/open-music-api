@@ -3,12 +3,17 @@ import { server as HapiServer } from '@hapi/hapi'
 import albums from './api/albums/index.js'
 import AlbumsService from './services/AlbumsService.js'
 import AlbumsValidator from './validator/albums/index.js'
+import songs from './api/songs/index.js'
+import SongsService from './services/SongsService.js'
+import SongValidator from './validator/songs/index.js'
 import ClientError from './exceptions/ClientError.js'
 
 config()
 
 const init = async () => {
   const albumsService = new AlbumsService()
+
+  const songsService = new SongsService()
 
   const server = new HapiServer({
     port: process.env.PORT,
@@ -20,13 +25,22 @@ const init = async () => {
     }
   })
 
-  await server.register({
-    plugin: albums,
-    options: {
-      service: albumsService,
-      validator: AlbumsValidator
+  await server.register([
+    {
+      plugin: albums,
+      options: {
+        service: albumsService,
+        validator: AlbumsValidator
+      }
+    },
+    {
+      plugin: songs,
+      options: {
+        service: songsService,
+        validator: SongValidator
+      }
     }
-  })
+  ])
 
   server.ext('onPreResponse', (request, h) => {
     const { response } = request
