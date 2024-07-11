@@ -1,6 +1,7 @@
 import pool from '../config/database.js'
 import InvariantError from '../exceptions/InvariantError.js'
 import { nanoid } from 'nanoid'
+import { mapDBToSongsModel } from '../utils/index.js'
 
 class SongsService {
   constructor () {
@@ -22,6 +23,18 @@ class SongsService {
     }
 
     return result.rows[0].id
+  }
+
+  async getSongs () {
+    const query = {
+      text: 'SELECT * FROM songs'
+    }
+
+    await this._pool.query(query)
+
+    const result = await this._pool.query(query)
+
+    return result.rows.map(mapDBToSongsModel)
   }
 }
 

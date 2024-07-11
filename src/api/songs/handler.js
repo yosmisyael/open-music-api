@@ -25,6 +25,15 @@ class SongsHandler {
 
     return response
   }
+
+  async getSongsHandler (request, h) {
+    const songs = await this._service.getSongs()
+
+    return h.response({
+      status: 'success',
+      data: { songs }
+    })
+  }
 }
 
 export default SongsHandler
