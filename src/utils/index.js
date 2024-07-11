@@ -1,13 +1,15 @@
 function mapDBToAlbumsModel ({
   id,
   name,
-  year
+  year,
+  songs
 }) {
   return {
     album: {
       id,
       name,
-      year
+      year,
+      songs
     }
   }
 }
