@@ -34,6 +34,17 @@ class SongsHandler {
       data: { songs }
     })
   }
+
+  async getSongByIdHandler (request, h) {
+    const { id } = request.params
+
+    const song = await this._service.getSongById(id)
+
+    return h.response({
+      status: 'success',
+      data: { song }
+    })
+  }
 }
 
 export default SongsHandler

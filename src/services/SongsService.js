@@ -1,7 +1,8 @@
 import pool from '../config/database.js'
 import InvariantError from '../exceptions/InvariantError.js'
 import { nanoid } from 'nanoid'
-import { mapDBToSongsModel } from '../utils/index.js'
+import { mapDBToSongModel, mapDBToSongsModel } from '../utils/index.js'
+import NotFoundError from '../exceptions/NotFoundError.js'
 
 class SongsService {
   constructor () {
@@ -35,6 +36,21 @@ class SongsService {
     const result = await this._pool.query(query)
 
     return result.rows.map(mapDBToSongsModel)
+  }
+
+  async getSongById (id) {
+    const query = {
+      text: 'SELECT * FROM songs WHERE id = $1',
+      values: [id]
+    }
+
+    const result = await this._pool.query(query)
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Song not found.')
+    }
+
+    return result.rows.map(mapDBToSongModel)[0]
   }
 }
 
