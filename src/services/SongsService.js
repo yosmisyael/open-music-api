@@ -1,7 +1,6 @@
 import pool from '../config/database.js'
 import InvariantError from '../exceptions/InvariantError.js'
 import { nanoid } from 'nanoid'
-import { mapDBToSongModel, mapDBToSongsModel } from '../utils/index.js'
 import NotFoundError from '../exceptions/NotFoundError.js'
 
 class SongsService {
@@ -28,13 +27,13 @@ class SongsService {
 
   async getSongs ({ title, performer }) {
     const query = {
-      text: 'SELECT * FROM songs WHERE title ILIKE $1 AND performer ILIKE $2',
+      text: 'SELECT id, title, performer FROM songs WHERE title ILIKE $1 AND performer ILIKE $2',
       values: [`%${title}%`, `%${performer}%`]
     }
 
     const result = await this._pool.query(query)
 
-    return result.rows.map(mapDBToSongsModel)
+    return result.rows
   }
 
   async getSongById (id) {
@@ -49,7 +48,7 @@ class SongsService {
       throw new NotFoundError('Song not found.')
     }
 
-    return result.rows.map(mapDBToSongModel)[0]
+    return result.rows[0]
   }
 
   async editSongById (id, { title, year, genre, performer, duration, albumId }) {
