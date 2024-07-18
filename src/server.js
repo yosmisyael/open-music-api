@@ -11,6 +11,10 @@ import SongValidator from './validator/songs/index.js'
 import users from './api/users/index.js'
 import UsersService from './services/UsersService.js'
 import UsersValidator from './validator/users/index.js'
+import authentications from './api/authentications/index.js'
+import AuthenticationsService from './services/AuthenticationsService.js'
+import TokenManager from './tokenize/TokenManager.js'
+import AuthenticationsValidator from './validator/authentications/index.js'
 config()
 
 const init = async () => {
@@ -19,6 +23,8 @@ const init = async () => {
   const songsService = new SongsService()
 
   const usersService = new UsersService()
+
+  const authenticationsService = new AuthenticationsService()
 
   const server = new HapiServer({
     port: process.env.PORT,
@@ -69,6 +75,14 @@ const init = async () => {
       options: {
         service: usersService,
         validator: UsersValidator
+      }
+    },
+    {
+      plugin: authentications,
+      options: {
+        service: authenticationsService,
+        tokenManager: TokenManager,
+        validator: AuthenticationsValidator
       }
     }
   ])
