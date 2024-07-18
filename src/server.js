@@ -1,19 +1,23 @@
 import { config } from 'dotenv'
 import { server as HapiServer } from '@hapi/hapi'
+import ClientError from './exceptions/ClientError.js'
 import albums from './api/albums/index.js'
 import AlbumsService from './services/AlbumsService.js'
 import AlbumsValidator from './validator/albums/index.js'
 import songs from './api/songs/index.js'
 import SongsService from './services/SongsService.js'
 import SongValidator from './validator/songs/index.js'
-import ClientError from './exceptions/ClientError.js'
-
+import users from './api/users/index.js'
+import UsersService from './services/UsersService.js'
+import UsersValidator from './validator/users/index.js'
 config()
 
 const init = async () => {
   const albumsService = new AlbumsService()
 
   const songsService = new SongsService()
+
+  const usersService = new UsersService()
 
   const server = new HapiServer({
     port: process.env.PORT,
@@ -38,6 +42,13 @@ const init = async () => {
       options: {
         service: songsService,
         validator: SongValidator
+      }
+    },
+    {
+      plugin: users,
+      options: {
+        service: usersService,
+        validator: UsersValidator
       }
     }
   ])
