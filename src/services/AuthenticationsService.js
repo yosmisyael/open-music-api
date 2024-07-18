@@ -26,7 +26,7 @@ class AuthenticationsService {
     const result = await this._pool.query(query)
 
     if (!result.rows.length) {
-      throw new InvariantError('Refresh token tidak valid')
+      throw new InvariantError('Invalid refresh token.')
     }
   }
 
@@ -35,6 +35,7 @@ class AuthenticationsService {
       text: 'DELETE FROM authentications WHERE token = $1',
       values: [token]
     }
+
     await this._pool.query(query)
   }
 
@@ -43,18 +44,19 @@ class AuthenticationsService {
       text: 'SELECT id, password FROM users WHERE username = $1',
       values: [username]
     }
+
     const result = await this._pool.query(query)
 
     if (!result.rows.length) {
-      throw new AuthenticationError('Kredensial yang Anda berikan salah')
+      throw new AuthenticationError('Invalid credentials.')
     }
 
     const { id, password: hashedPassword } = result.rows[0]
 
-    const match = await bcrypt.compare(password, hashedPassword)
+    const isMatch = await bcrypt.compare(password, hashedPassword)
 
-    if (!match) {
-      throw new AuthenticationError('Kredensial yang Anda berikan salah')
+    if (!isMatch) {
+      throw new AuthenticationError('Invalid credentials.')
     }
 
     return id
