@@ -23,6 +23,20 @@ class PlaylistsService {
 
     return result.rows[0].id
   }
+
+  async getPlaylist (owner) {
+    const query = {
+      text: `SELECT users.username, playlists.id, playlists.name
+                 FROM playlists
+                          INNER JOIN users ON playlists.owner = users.id
+                 WHERE playlists.owner = $1`,
+      values: [owner]
+    }
+
+    const result = await this._pool.query(query)
+
+    return result.rows
+  }
 }
 
 export default PlaylistsService

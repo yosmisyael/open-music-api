@@ -14,12 +14,21 @@ class PlaylistsHandler {
 
     const playlistId = await this._service.addPlaylist(request.payload)
 
-    const response = h.response({
+    return h.response({
       status: 'success',
       result: { playlistId }
     })
+  }
 
-    return response
+  async getPlaylistsHandler (request, h) {
+    const { id } = request.auth.credentials
+
+    const playlists = await this._service.getSongs(id)
+
+    return h.response({
+      status: 'success',
+      data: { playlists }
+    })
   }
 }
 
