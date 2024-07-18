@@ -2,7 +2,7 @@ import pool from '../config/database.js'
 import { nanoid } from 'nanoid'
 import InvariantError from '../exceptions/InvariantError.js'
 import NotFoundError from '../exceptions/NotFoundError.js'
-import AuthorizationError from "../exceptions/AuthorizationError.js";
+import AuthorizationError from '../exceptions/AuthorizationError.js'
 
 class PlaylistsService {
   constructor () {
