@@ -7,7 +7,7 @@
   "scripts": {
     "start:prod": "NODE_ENV=production node .",
     "start:dev": "nodemon .",
-    "test": "newman run 'test/Open Music API V1 Test.postman_collection.json' -e 'test/OpenMusic API Test.postman_environment.json'",
+    "test": "newman run 'test/v2/Open Music API V2 Test.postman_collection.json' -e 'test/v2/OpenMusic API Test.postman_environment.json'",
     "lint": "eslint src",
     "migrate": "node-pg-migrate"
   },
