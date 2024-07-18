@@ -23,7 +23,7 @@ class PlaylistsHandler {
   async getPlaylistsHandler (request, h) {
     const { id } = request.auth.credentials
 
-    const playlists = await this._service.getSongs(id)
+    const playlists = await this._service.getPlaylist(id)
 
     return h.response({
       status: 'success',
