@@ -1,6 +1,8 @@
 import pool from '../config/database.js'
 import { nanoid } from 'nanoid'
 import InvariantError from '../exceptions/InvariantError.js'
+import NotFoundError from '../exceptions/NotFoundError.js'
+import AuthorizationError from "../exceptions/AuthorizationError.js";
 
 class PlaylistsService {
   constructor () {
@@ -36,6 +38,36 @@ class PlaylistsService {
     const result = await this._pool.query(query)
 
     return result.rows
+  }
+
+  async deletePlaylist (id) {
+    const query = {
+      text: 'DELETE FROM playlists WHERE id = $1',
+      values: [id]
+    }
+
+    const result = await this._pool.query(query)
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Playlist not found.')
+    }
+  }
+
+  async verifyPlaylistOwnership (id, owner) {
+    const query = {
+      text: 'SELECT id from playlists WHERE id = $1',
+      values: [id]
+    }
+
+    const result = this._pool.query(query)
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Playlist not found.')
+    }
+
+    if (owner !== result.rows[0].owner) {
+      throw new AuthorizationError('You do not have rights to access this resource.')
+    }
   }
 }
 

@@ -30,6 +30,21 @@ class PlaylistsHandler {
       data: { playlists }
     })
   }
+
+  async deletePlaylistsHandler (request, h) {
+    const { id } = request.params
+
+    const { id: credentialId } = request.auth.credentials
+
+    await this._service.verifyPlaylistOwnership(id, credentialId)
+
+    await this._service.deletePlaylist(id)
+
+    return h.response({
+      status: 'success',
+      message: 'Playlist deleted successfully.'
+    })
+  }
 }
 
 export default PlaylistsHandler

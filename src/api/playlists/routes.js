@@ -8,6 +8,11 @@ const routes = (handler) => [
     method: 'GET',
     path: '/playlists',
     handler: handler.getPlaylistsHandler
+  },
+  {
+    method: 'DELETE',
+    path: '/playlists/{id}',
+    handler: handler.deletePlaylistsHandler
   }
 ]
 
