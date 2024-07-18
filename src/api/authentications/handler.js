@@ -1,4 +1,4 @@
-class AuthenticationHandler {
+class AuthenticationsHandler {
   constructor (service, tokenManager, validator) {
     this._service = service
 
@@ -64,4 +64,4 @@ class AuthenticationHandler {
   }
 }
 
-export default AuthenticationHandler
+export default AuthenticationsHandler

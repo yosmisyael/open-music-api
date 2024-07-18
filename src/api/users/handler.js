@@ -1,4 +1,4 @@
-class UserHandler {
+class UsersHandler {
   constructor (service, validator) {
     this._service = service
 
@@ -7,8 +7,9 @@ class UserHandler {
 
   async postUserHandler (request, h) {
     this._validator.validateUserPayload(request.payload)
-
+    console.log('postUserHandler 1')
     const userId = await this._service.addUser(request.payload)
+    console.log('postUserHandler 2')
 
     const response = h.response({
       status: 'success',
@@ -21,4 +22,4 @@ class UserHandler {
   }
 }
 
-export default UserHandler
+export default UsersHandler
