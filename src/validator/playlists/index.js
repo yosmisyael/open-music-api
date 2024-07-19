@@ -2,7 +2,7 @@ import InvariantError from '../../exceptions/InvariantError.js'
 import { PlaylistPayloadSchema, PlaylistSongPayloadSchema } from './schema.js'
 
 const PlaylistsValidator = {
-  validatePostPlaylistsPayload: (payload) => {
+  validatePostPlaylistPayload: (payload) => {
     const validationResult = PlaylistPayloadSchema.validate(payload)
 
     if (validationResult.error) {
@@ -10,7 +10,7 @@ const PlaylistsValidator = {
     }
   },
 
-  validatePostSongPlaylistsPayload: (payload) => {
+  validatePostPlaylistsSongPayload: (payload) => {
     const validationResult = PlaylistSongPayloadSchema.validate(payload)
 
     if (validationResult.error) {
