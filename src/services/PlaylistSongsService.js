@@ -64,6 +64,19 @@ class PlaylistSongsService {
 
     return result.rows[0]
   }
+
+  async deletePlaylistSong (songId) {
+    const query = {
+      text: 'DELETE FROM playlist_songs WHERE song_id = $1 RETURNING id',
+      values: [songId]
+    }
+
+    const result = await this._pool.query(query)
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Song not found on playlist.')
+    }
+  }
 }
 
 export default PlaylistSongsService
