@@ -36,7 +36,7 @@ class PlaylistsService {
                             LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id
                    WHERE playlists.owner = $1
                       OR collaborations.user_id = $1
-                   GROUP BY playlists.id`,
+                   GROUP BY playlists.id, users.username`,
       values: [owner]
     }
 
@@ -81,7 +81,11 @@ class PlaylistsService {
     } catch (error) {
       if (error instanceof NotFoundError) throw error
 
-      await this._collaborationsService.verifyCollaborator(playlistId, userId)
+      try {
+        await this._collaborationsService.verifyCollaborator(playlistId, userId)
+      } catch {
+        throw error
+      }
     }
   }
 }
