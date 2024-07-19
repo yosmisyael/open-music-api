@@ -36,6 +36,19 @@ class CollaborationsService {
       throw new InvariantError('Failed to remove collaborator.')
     }
   }
+
+  async verifyCollaborator (playlistId, userId) {
+    const query = {
+      text: 'SELECT user_id FROM collaborations WHERE playlist_id = $1 AND user_id = $2',
+      values: [playlistId, userId]
+    }
+
+    const result = await this._pool.query(query)
+
+    if (!result.rows.length) {
+      throw new InvariantError('Invalid collaborator verification.')
+    }
+  }
 }
 
 export default CollaborationsService
