@@ -18,7 +18,7 @@ exports.up = (pgm) => {
     song_id: {
       type: 'VARCHAR(25)',
       notNull: true,
-      references: 'playlists',
+      references: 'songs',
       onDelete: 'CASCADE'
     }
   })
