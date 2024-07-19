@@ -42,7 +42,7 @@ class PlaylistsService {
 
   async deletePlaylist (id) {
     const query = {
-      text: 'DELETE FROM playlists WHERE id = $1',
+      text: 'DELETE FROM playlists WHERE id = $1 RETURNING id',
       values: [id]
     }
 
