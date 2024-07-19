@@ -22,7 +22,7 @@ class PlaylistSongsHandler {
 
     await this._playlistSongsService.verifySongExist(songId)
 
-    await this._playlistsService.verifyPlaylistOwnership(playlistId, userId)
+    await this._playlistsService.verifyPlaylistAccess(playlistId, userId)
 
     await this._playlistSongsService.addSongToPlaylist(playlistId, songId)
 
@@ -41,7 +41,7 @@ class PlaylistSongsHandler {
 
     const { id: playlistId } = request.params
 
-    await this._playlistsService.verifyPlaylistOwnership(playlistId, userId)
+    await this._playlistsService.verifyPlaylistAccess(playlistId, userId)
 
     const playlist = await this._playlistSongsService.getPlaylistSongs(playlistId)
 
@@ -58,7 +58,7 @@ class PlaylistSongsHandler {
 
     const { id: playlistId } = request.params
 
-    await this._playlistsService.verifyPlaylistOwnership(playlistId, userId)
+    await this._playlistsService.verifyPlaylistAccess(playlistId, userId)
 
     const { songId } = request.payload
 
