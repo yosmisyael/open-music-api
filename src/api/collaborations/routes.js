@@ -2,7 +2,12 @@ const routes = (handler) => [
   {
     method: 'POST',
     path: '/collaborations',
-    handler: handler.postCollaborationHandler()
+    handler: handler.postCollaborationHandler
+  },
+  {
+    method: 'DELETE',
+    path: '/collaborations',
+    handler: handler.deleteCollaborationHandler
   }
 ]
 
