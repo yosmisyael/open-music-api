@@ -18,6 +18,9 @@ import AuthenticationsValidator from './validator/authentications/index.js'
 import playlists from './api/playlists/index.js'
 import PlaylistsService from './services/PlaylistsService.js'
 import PlaylistsValidator from './validator/playlists/index.js'
+import playlistsongs from './api/playlistsongs/index.js'
+import PlaylistSongsService from './services/PlaylistSongsService.js'
+import PlaylistSongsValidator from './validator/playlistsongs/index.js'
 config()
 
 const init = async () => {
@@ -30,6 +33,8 @@ const init = async () => {
   const authenticationsService = new AuthenticationsService()
 
   const playlistsService = new PlaylistsService()
+
+  const playlistSongsService = new PlaylistSongsService()
 
   const server = new HapiServer({
     port: process.env.PORT,
@@ -98,6 +103,14 @@ const init = async () => {
       options: {
         service: playlistsService,
         validator: PlaylistsValidator
+      }
+    },
+    {
+      plugin: playlistsongs,
+      options: {
+        playlistsService,
+        playlistSongsService,
+        validator: PlaylistSongsValidator
       }
     }
   ])
