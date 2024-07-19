@@ -1,3 +1,5 @@
+import autoBind from 'auto-bind'
+
 class PlaylistSongsHandler {
   constructor (playlistsService, playlistSongsService, validator) {
     this._playlistsService = playlistsService
@@ -5,6 +7,8 @@ class PlaylistSongsHandler {
     this._playlistSongsService = playlistSongsService
 
     this._validator = validator
+
+    autoBind(this)
   }
 
   async postPlaylistSongHandler (request, h) {
@@ -16,9 +20,11 @@ class PlaylistSongsHandler {
 
     const { songId } = request.payload
 
+    await this._playlistSongsService.verifySongExist(songId)
+
     await this._playlistsService.verifyPlaylistOwnership(playlistId, userId)
 
-    await this._playlistSongsService.addSongToPlaylist({ songId, playlistId })
+    await this._playlistSongsService.addSongToPlaylist(playlistId, songId)
 
     const response = h.response({
       status: 'success',
@@ -28,6 +34,21 @@ class PlaylistSongsHandler {
     response.code(201)
 
     return response
+  }
+
+  async getPlaylistSongsHandler (request, h) {
+    const { id: userId } = request.auth.credentials
+
+    const { id: playlistId } = request.params
+
+    await this._playlistsService.verifyPlaylistOwnership(playlistId, userId)
+
+    const playlist = await this._playlistSongsService.getPlaylistSongs(playlistId)
+
+    return h.response({
+      status: 'success',
+      data: { playlist }
+    })
   }
 }
 
