@@ -5,8 +5,10 @@ import NotFoundError from '../exceptions/NotFoundError.js'
 import AuthorizationError from '../exceptions/AuthorizationError.js'
 
 class PlaylistsService {
-  constructor () {
+  constructor (collaborationsService) {
     this._pool = pool
+
+    this._collaborationsService = collaborationsService
   }
 
   async addPlaylist (name, owner) {
@@ -67,6 +69,16 @@ class PlaylistsService {
 
     if (owner !== result.rows[0].owner) {
       throw new AuthorizationError('You do not have rights to access this resource.')
+    }
+  }
+
+  async verifyPlaylistAccess (playlistId, userId) {
+    try {
+      await this.verifyPlaylistOwnership(playlistId, userId)
+    } catch (error) {
+      if (error instanceof NotFoundError) throw error
+
+      await this._collaborationsService.verifyCollaborator(playlistId, userId)
     }
   }
 }
