@@ -50,6 +50,25 @@ class PlaylistSongsHandler {
       data: { playlist }
     })
   }
+
+  async deletePlaylistSongHandler (request, h) {
+    await this._validator.validateDeletePlaylistsSongPayload(request.payload)
+
+    const { id: userId } = request.auth.credentials
+
+    const { id: playlistId } = request.params
+
+    await this._playlistsService.verifyPlaylistOwnership(playlistId, userId)
+
+    const { songId } = request.payload
+
+    await this._playlistSongsService.deletePlaylistSong(songId)
+
+    return h.response({
+      status: 'success',
+      message: 'Song removed from playlist successfully.'
+    })
+  }
 }
 
 export default PlaylistSongsHandler
