@@ -1,5 +1,5 @@
 import InvariantError from '../../exceptions/InvariantError.js'
-import { PlaylistPayloadSchema, PlaylistSongPayloadSchema } from './schema.js'
+import PlaylistPayloadSchema from './schema.js'
 
 const PlaylistsValidator = {
   validatePostPlaylistPayload: (payload) => {
