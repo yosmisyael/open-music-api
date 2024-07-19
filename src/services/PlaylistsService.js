@@ -55,11 +55,11 @@ class PlaylistsService {
 
   async verifyPlaylistOwnership (id, owner) {
     const query = {
-      text: 'SELECT id from playlists WHERE id = $1',
+      text: 'SELECT owner from playlists WHERE id = $1',
       values: [id]
     }
 
-    const result = this._pool.query(query)
+    const result = await this._pool.query(query)
 
     if (!result.rows.length) {
       throw new NotFoundError('Playlist not found.')
