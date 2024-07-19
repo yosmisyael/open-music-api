@@ -1,3 +1,5 @@
+import autoBind from 'auto-bind'
+
 class CollaborationsHandler {
   constructor (collaborationsService, playlistsService, validator) {
     this._collaborationsService = collaborationsService
@@ -5,6 +7,8 @@ class CollaborationsHandler {
     this._playlistsService = playlistsService
 
     this._validator = validator
+
+    autoBind(this)
   }
 
   async postCollaborationHandler (request, h) {
