@@ -16,6 +16,24 @@ class ActivitiesService {
 
     await this._pool.query(query)
   }
+
+  async getActivities (playlistId) {
+    const query = {
+      text: `SELECT playlist_id,
+                    COALESCE(JSON_AGG(JSON_BUILD_OBJECT('username', users.username, 'title', songs.title, 'action',
+                                                        action, 'time', time)), '[]'::json) AS activities
+             FROM playlist_songs_activities
+                      LEFT JOIN users ON user_id = users.id
+                      LEFT JOIN songs ON song_id = songs.id
+             WHERE playlist_id = $1
+             GROUP BY playlist_id`,
+      values: [playlistId]
+    }
+
+    const result = await this._pool.query(query)
+
+    return result.rows[0]
+  }
 }
 
 export default ActivitiesService
