@@ -26,7 +26,7 @@ class ActivitiesService {
                       LEFT JOIN users ON user_id = users.id
                       LEFT JOIN songs ON song_id = songs.id
              WHERE playlist_id = $1
-             GROUP BY playlist_id`,
+             GROUP BY playlist_id, time ORDER BY time`,
       values: [playlistId]
     }
 
