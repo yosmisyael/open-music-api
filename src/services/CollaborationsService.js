@@ -3,8 +3,10 @@ import { nanoid } from 'nanoid'
 import InvariantError from '../exceptions/InvariantError.js'
 
 class CollaborationsService {
-  constructor () {
+  constructor (usersServiece) {
     this._pool = pool
+
+    this._usersService = usersServiece
   }
 
   async addCollaboration (playlistId, userId) {
@@ -48,6 +50,10 @@ class CollaborationsService {
     if (!result.rows.length) {
       throw new InvariantError('Invalid collaborator verification.')
     }
+  }
+
+  async verifyCollaboratorExist (userId) {
+    await this._usersService.getUserById(userId)
   }
 }
 
