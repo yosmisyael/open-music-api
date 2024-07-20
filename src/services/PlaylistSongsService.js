@@ -35,14 +35,14 @@ class PlaylistSongsService {
                     playlists.name,
                     users.username,
                     COALESCE(
-                                    JSON_AGG(
+                            JSON_AGG(
                                     JSON_BUILD_OBJECT(
                                             'id', songs.id,
                                             'title', songs.title,
                                             'performer', songs.performer
                                     )
-                                            ) FILTER (WHERE songs.id IS NOT NULL),
-                                    '[]'::json
+                            ),
+                            '[]'::json
                     ) AS songs
              FROM playlists
                       JOIN users ON playlists.owner = users.id
