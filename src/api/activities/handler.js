@@ -2,15 +2,15 @@ import autoBind from 'auto-bind'
 
 class ActivitiesHandler {
   constructor (service) {
-    this._activiesServices = service
+    this.service = service
 
     autoBind(this)
   }
 
   async getActivitiesHandler (request, h) {
     const { id } = request.params
-
-    const result = await this._activiesServices.getActivities(id)
+    console.log(id)
+    const result = await this.service.getActivities(id)
 
     return h.response({
       status: 'success',
