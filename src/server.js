@@ -24,6 +24,7 @@ import PlaylistSongsValidator from './validator/playlistsongs/index.js'
 import collaborations from './api/collaborations/index.js'
 import CollaborationsService from './services/CollaborationsService.js'
 import CollaborationsValidator from './validator/collaborations/index.js'
+import activities from "./api/activities/index.js";
 import ActivitiesService from "./services/ActivitiesService.js";
 config()
 
@@ -128,6 +129,12 @@ const init = async () => {
         collaborationsService,
         playlistsService,
         validator: CollaborationsValidator
+      }
+    },
+    {
+      plugin: activities,
+      options: {
+        service: activitiesServices
       }
     }
   ])
