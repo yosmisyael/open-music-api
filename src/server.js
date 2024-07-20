@@ -43,7 +43,7 @@ const init = async () => {
 
   const playlistSongsService = new PlaylistSongsService(songsService)
 
-  const activitiesServices = new ActivitiesService()
+  const activitiesService = new ActivitiesService()
 
   const server = new HapiServer({
     port: process.env.PORT,
@@ -119,7 +119,7 @@ const init = async () => {
       options: {
         playlistsService,
         playlistSongsService,
-        activitiesServices,
+        activitiesService,
         validator: PlaylistSongsValidator
       }
     },
@@ -134,7 +134,8 @@ const init = async () => {
     {
       plugin: activities,
       options: {
-        service: activitiesServices
+        activitiesService,
+        playlistsService
       }
     }
   ])

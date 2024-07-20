@@ -19,7 +19,7 @@ class ActivitiesService {
 
   async getActivities (playlistId) {
     const query = {
-      text: `SELECT playlist_id,
+      text: `SELECT playlist_id as "playlistId",
                     COALESCE(JSON_AGG(JSON_BUILD_OBJECT('username', users.username, 'title', songs.title, 'action',
                                                         action, 'time', time)), '[]'::json) AS activities
              FROM playlist_songs_activities

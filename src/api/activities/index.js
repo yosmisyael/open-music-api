@@ -4,8 +4,8 @@ import routes from './routes.js'
 export default {
   name: 'activities',
   version: '1.0.0',
-  register: (server, { service }) => {
-    const activitiesHandler = new ActivitiesHandler(service)
+  register: (server, { activitiesService, playlistsService }) => {
+    const activitiesHandler = new ActivitiesHandler(activitiesService, playlistsService)
 
     server.route(routes(activitiesHandler))
   }
