@@ -4,8 +4,10 @@ import InvariantError from '../exceptions/InvariantError.js'
 import NotFoundError from '../exceptions/NotFoundError.js'
 
 class PlaylistSongsService {
-  constructor () {
+  constructor (songsService) {
     this._pool = pool
+
+    this._songsService = songsService
   }
 
   async addSongToPlaylist (playlistId, songId) {
@@ -24,16 +26,7 @@ class PlaylistSongsService {
   }
 
   async verifySongExist (songId) {
-    const query = {
-      text: 'SELECT * FROM songs WHERE id = $1',
-      values: [songId]
-    }
-
-    const result = await this._pool.query(query)
-
-    if (!result.rows.length) {
-      throw new NotFoundError('Song not found.')
-    }
+    await this._songsService.getSongById(songId)
   }
 
   async getPlaylistSongs (playlistId) {
