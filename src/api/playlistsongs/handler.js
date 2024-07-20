@@ -28,7 +28,7 @@ class PlaylistSongsHandler {
 
     await this._playlistSongsService.addSongToPlaylist(playlistId, songId)
 
-    await this._activitiesService(playlistId, songId, userId, 'add')
+    await this._activitiesService.addActivity(playlistId, songId, userId, 'add')
 
     const response = h.response({
       status: 'success',
@@ -68,7 +68,7 @@ class PlaylistSongsHandler {
 
     await this._playlistSongsService.deletePlaylistSong(songId)
 
-    await this._activitiesService(playlistId, songId, userId, 'delete')
+    await this._activitiesService.addActivity(playlistId, songId, userId, 'delete')
 
     return h.response({
       status: 'success',
