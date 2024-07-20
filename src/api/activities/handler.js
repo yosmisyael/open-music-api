@@ -9,7 +9,7 @@ class ActivitiesHandler {
 
   async getActivitiesHandler (request, h) {
     const { id } = request.params
-    console.log(id)
+
     const result = await this.service.getActivities(id)
 
     return h.response({
