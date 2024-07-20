@@ -2,6 +2,7 @@ import pool from '../config/database.js'
 import InvariantError from '../exceptions/InvariantError.js'
 import { nanoid } from 'nanoid'
 import bcrypt from 'bcrypt'
+import NotFoundError from '../exceptions/NotFoundError.js'
 
 class UsersService {
   constructor () {
@@ -37,6 +38,21 @@ class UsersService {
       throw new InvariantError('Failed to register new user.')
     }
     return result.rows[0].id
+  }
+
+  async getUserById (id) {
+    const query = {
+      text: 'SELECT * FROM users WHERE id = $1',
+      values: [id]
+    }
+
+    const result = await this._pool.query(query)
+
+    if (!result.rows[0].id) {
+      throw new NotFoundError('User not found.')
+    }
+
+    return result.rows[0]
   }
 }
 
