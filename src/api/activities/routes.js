@@ -1,7 +1,7 @@
 const routes = (handler) => [
   {
     method: 'GET',
-    path: 'playlist/{id}/activities/',
+    path: '/playlist/{id}/activities',
     handler: handler.getActivitiesHandler
   }
 ]
