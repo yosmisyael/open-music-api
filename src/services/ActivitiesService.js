@@ -19,14 +19,14 @@ class ActivitiesService {
 
   async getActivities (playlistId) {
     const query = {
-      text: `SELECT playlist_id as "playlistId",
+      text: `SELECT playlist_id                                                                           as "playlistId",
                     COALESCE(JSON_AGG(JSON_BUILD_OBJECT('username', users.username, 'title', songs.title, 'action',
-                                                        action, 'time', time)), '[]'::json) AS activities
+                                                        action, 'time', time) ORDER BY time), '[]'::json) AS activities
              FROM playlist_songs_activities
-                      LEFT JOIN users ON user_id = users.id
-                      LEFT JOIN songs ON song_id = songs.id
+                    LEFT JOIN users ON user_id = users.id
+                    LEFT JOIN songs ON song_id = songs.id
              WHERE playlist_id = $1
-             GROUP BY playlist_id, time ORDER BY time`,
+             GROUP BY playlist_id`,
       values: [playlistId]
     }
 
