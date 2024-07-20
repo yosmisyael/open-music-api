@@ -24,6 +24,7 @@ import PlaylistSongsValidator from './validator/playlistsongs/index.js'
 import collaborations from './api/collaborations/index.js'
 import CollaborationsService from './services/CollaborationsService.js'
 import CollaborationsValidator from './validator/collaborations/index.js'
+import ActivitiesService from "./services/ActivitiesService.js";
 config()
 
 const init = async () => {
@@ -40,6 +41,8 @@ const init = async () => {
   const playlistsService = new PlaylistsService(collaborationsService)
 
   const playlistSongsService = new PlaylistSongsService(songsService)
+
+  const activitiesServices = new ActivitiesService()
 
   const server = new HapiServer({
     port: process.env.PORT,
@@ -115,6 +118,7 @@ const init = async () => {
       options: {
         playlistsService,
         playlistSongsService,
+        activitiesServices,
         validator: PlaylistSongsValidator
       }
     },

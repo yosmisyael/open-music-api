@@ -1,10 +1,12 @@
 import autoBind from 'auto-bind'
 
 class PlaylistSongsHandler {
-  constructor (playlistsService, playlistSongsService, validator) {
+  constructor (playlistsService, playlistSongsService, activitiesService, validator) {
     this._playlistsService = playlistsService
 
     this._playlistSongsService = playlistSongsService
+
+    this._activitiesService = activitiesService
 
     this._validator = validator
 
@@ -25,6 +27,8 @@ class PlaylistSongsHandler {
     await this._playlistsService.verifyPlaylistAccess(playlistId, userId)
 
     await this._playlistSongsService.addSongToPlaylist(playlistId, songId)
+
+    await this._activitiesService(playlistId, songId, userId, 'add')
 
     const response = h.response({
       status: 'success',
@@ -63,6 +67,8 @@ class PlaylistSongsHandler {
     const { songId } = request.payload
 
     await this._playlistSongsService.deletePlaylistSong(songId)
+
+    await this._activitiesService(playlistId, songId, userId, 'delete')
 
     return h.response({
       status: 'success',
