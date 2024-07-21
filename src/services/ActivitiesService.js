@@ -30,9 +30,9 @@ class ActivitiesService {
       values: [playlistId]
     }
 
-    const result = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    return result.rows[0]
+    return rows[0]
   }
 }
 

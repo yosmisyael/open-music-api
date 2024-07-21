@@ -23,9 +23,9 @@ class AuthenticationsService {
       values: [token]
     }
 
-    const result = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rows.length) {
       throw new InvariantError('Invalid refresh token.')
     }
   }
@@ -45,13 +45,13 @@ class AuthenticationsService {
       values: [username]
     }
 
-    const result = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rows.length) {
       throw new AuthenticationError('Invalid credentials.')
     }
 
-    const { id, password: hashedPassword } = result.rows[0]
+    const { id, password: hashedPassword } = rows[0]
 
     const isMatch = await bcrypt.compare(password, hashedPassword)
 

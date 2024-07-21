@@ -16,13 +16,13 @@ class SongsService {
       values: [id, title, year, genre, performer, duration, albumId]
     }
 
-    const result = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!result.rows[0].id) {
+    if (!rowCount) {
       throw new InvariantError('Failed to add new song.')
     }
 
-    return result.rows[0].id
+    return rows[0].id
   }
 
   async getSongs ({ title, performer }) {
@@ -31,9 +31,9 @@ class SongsService {
       values: [`%${title}%`, `%${performer}%`]
     }
 
-    const result = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    return result.rows
+    return rows
   }
 
   async getSongById (id) {
@@ -42,13 +42,13 @@ class SongsService {
       values: [id]
     }
 
-    const result = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Song not found.')
     }
 
-    return result.rows[0]
+    return rows[0]
   }
 
   async editSongById (id, { title, year, genre, performer, duration, albumId }) {
@@ -57,9 +57,9 @@ class SongsService {
       values: [title, year, genre, performer, duration, albumId, id]
     }
 
-    const result = await this._pool.query(query)
+    const { rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Song not found.')
     }
   }
@@ -70,9 +70,9 @@ class SongsService {
       values: [id]
     }
 
-    const result = await this._pool.query(query)
+    const { rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Song not found.')
     }
   }

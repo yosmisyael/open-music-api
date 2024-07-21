@@ -18,9 +18,9 @@ class PlaylistSongsService {
       values: [id, playlistId, songId]
     }
 
-    const result = await this._pool.query(query)
+    const { rowCount } = await this._pool.query(query)
 
-    if (!result.rows[0].id) {
+    if (!rowCount) {
       throw new InvariantError('Failed to add song into playlist.')
     }
   }
@@ -53,9 +53,9 @@ class PlaylistSongsService {
       values: [playlistId]
     }
 
-    const result = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    return result.rows[0]
+    return rows[0]
   }
 
   async deletePlaylistSong (songId) {
@@ -64,9 +64,9 @@ class PlaylistSongsService {
       values: [songId]
     }
 
-    const result = await this._pool.query(query)
+    const { rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Song not found on playlist.')
     }
   }

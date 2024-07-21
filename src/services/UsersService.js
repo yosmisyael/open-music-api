@@ -15,9 +15,9 @@ class UsersService {
       values: [username]
     }
 
-    const result = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    if (result.rows.length > 0) {
+    if (rows.length > 0) {
       throw new InvariantError('Username already taken.')
     }
   }
@@ -32,12 +32,12 @@ class UsersService {
       values: [id, username, hashedPassword, fullname]
     }
 
-    const result = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new InvariantError('Failed to register new user.')
     }
-    return result.rows[0].id
+    return rows[0].id
   }
 
   async getUserById (id) {
@@ -46,13 +46,13 @@ class UsersService {
       values: [id]
     }
 
-    const result = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('User not found.')
     }
 
-    return result.rows[0]
+    return rows[0]
   }
 }
 

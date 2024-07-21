@@ -17,13 +17,13 @@ class CollaborationsService {
       values: [id, playlistId, userId]
     }
 
-    const result = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new InvariantError('Failed to add collaborator.')
     }
 
-    return result.rows[0].id
+    return rows[0].id
   }
 
   async deleteCollaboration (playlistId, userId) {
@@ -32,9 +32,9 @@ class CollaborationsService {
       values: [playlistId, userId]
     }
 
-    const result = await this._pool.query(query)
+    const { rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new InvariantError('Failed to remove collaborator.')
     }
   }
@@ -45,9 +45,9 @@ class CollaborationsService {
       values: [playlistId, userId]
     }
 
-    const result = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rows.length) {
       throw new InvariantError('Invalid collaborator verification.')
     }
   }

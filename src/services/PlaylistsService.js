@@ -19,13 +19,13 @@ class PlaylistsService {
       values: [id, name, owner]
     }
 
-    const result = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!result.rows[0].id) {
+    if (!rowCount) {
       throw new InvariantError('Failed to add new playlist.')
     }
 
-    return result.rows[0].id
+    return rows[0].id
   }
 
   async getPlaylist (owner) {
@@ -40,9 +40,9 @@ class PlaylistsService {
       values: [owner]
     }
 
-    const result = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    return result.rows
+    return rows
   }
 
   async deletePlaylist (id) {
@@ -51,9 +51,9 @@ class PlaylistsService {
       values: [id]
     }
 
-    const result = await this._pool.query(query)
+    const { rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Playlist not found.')
     }
   }
@@ -64,13 +64,13 @@ class PlaylistsService {
       values: [id]
     }
 
-    const result = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Playlist not found.')
     }
 
-    if (owner !== result.rows[0].owner) {
+    if (owner !== rows[0].owner) {
       throw new AuthorizationError('You do not have rights to access this resource.')
     }
   }

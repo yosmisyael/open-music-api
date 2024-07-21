@@ -17,13 +17,13 @@ class AlbumsService {
       values: [id, name, year]
     }
 
-    const result = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!result.rows[0].id) {
+    if (!rowCount) {
       throw new InvariantError('Failed to add new album.')
     }
 
-    return result.rows[0].id
+    return rows[0].id
   }
 
   async getAlbumById (id) {
@@ -47,13 +47,13 @@ class AlbumsService {
       values: [id]
     }
 
-    const result = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Album not found.')
     }
 
-    return result.rows.map(mapDBToAlbumsModel)[0]
+    return rows.map(mapDBToAlbumsModel)[0]
   }
 
   async editAlbumById (id, { name, year }) {
@@ -62,9 +62,9 @@ class AlbumsService {
       values: [name, year, id]
     }
 
-    const result = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rows.length) {
       throw new NotFoundError('Album not found.')
     }
   }
@@ -75,9 +75,9 @@ class AlbumsService {
       values: [id]
     }
 
-    const result = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    if (!result.rows.length) {
+    if (!rows.length) {
       throw new NotFoundError('Album not found.')
     }
   }
