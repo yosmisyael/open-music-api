@@ -1,6 +1,7 @@
 import { config } from 'dotenv'
 import { server as HapiServer } from '@hapi/hapi'
 import Jwt from '@hapi/jwt'
+import Inert from '@hapi/inert'
 import ClientError from './exceptions/ClientError.js'
 import albums from './api/albums/index.js'
 import AlbumsService from './services/AlbumsService.js'
@@ -60,9 +61,14 @@ const init = async () => {
     }
   })
 
-  await server.register({
-    plugin: Jwt
-  })
+  await server.register([
+    {
+      plugin: Jwt
+    },
+    {
+      plugin: Inert
+    }
+  ])
 
   server.auth.strategy('openmusic_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
