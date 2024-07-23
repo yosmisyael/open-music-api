@@ -2,7 +2,6 @@ import pool from '../config/database.js'
 import { nanoid } from 'nanoid'
 import InvariantError from '../exceptions/InvariantError.js'
 import NotFoundError from '../exceptions/NotFoundError.js'
-import { mapDBToAlbumsModel } from '../utils/index.js'
 
 class AlbumsService {
   constructor () {
@@ -45,6 +44,7 @@ class AlbumsService {
         SELECT albums.id,
                albums.name,
                albums.year,
+               albums.cover as "coverUrl",
                CASE
                  WHEN EXISTS (SELECT 1 FROM songs WHERE songs."albumId" = albums.id) THEN
                    json_agg(json_build_object('id', songs.id, 'performer', songs.performer, 'title',
@@ -66,7 +66,7 @@ class AlbumsService {
       throw new NotFoundError('Album not found.')
     }
 
-    return rows.map(mapDBToAlbumsModel)[0]
+    return rows[0]
   }
 
   async editAlbumById (id, { name, year }) {
