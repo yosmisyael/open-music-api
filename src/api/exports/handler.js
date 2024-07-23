@@ -1,3 +1,5 @@
+import autoBind from 'auto-bind'
+
 class ExportsHandler {
   constructor (exportsService, playlistsService, validator) {
     this._exportsService = exportsService
@@ -5,6 +7,8 @@ class ExportsHandler {
     this._playlistsService = playlistsService
 
     this._validator = validator
+
+    autoBind(this)
   }
 
   async postExportsPlaylistHandler (request, h) {
