@@ -1,3 +1,6 @@
+import { config as dotenvConfig } from 'dotenv'
+dotenvConfig()
+
 const config = {
   app: {
     host: process.env.HOST,
