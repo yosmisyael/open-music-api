@@ -12,7 +12,8 @@ const routes = (handler) => [
       payload: {
         allow: 'multipart/form-data',
         multipart: true,
-        output: 'stream'
+        output: 'stream',
+        maxBytes: 512000
       }
     }
   },
