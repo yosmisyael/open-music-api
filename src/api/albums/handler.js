@@ -31,11 +31,11 @@ class AlbumsHandler {
   }
 
   async postAlbumCoverHandler (request, h) {
-    const { data } = request.payload
+    const { cover } = request.payload
 
-    this._validator.validateAlbumCoverHeaders(data.hapi.headers)
+    this._validator.validateAlbumCoverHeaders(cover.hapi.headers)
 
-    const filename = await this._storageService.writeFile(data, data.hapi)
+    const filename = await this._storageService.writeFile(cover, cover.hapi)
 
     const path = `http://${config.app.host}:${config.app.port}/albums/covers/${filename}`
 
@@ -60,7 +60,7 @@ class AlbumsHandler {
 
     return h.response({
       status: 'success',
-      data: album
+      data: { album }
     })
   }
 
