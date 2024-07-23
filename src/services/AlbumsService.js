@@ -26,6 +26,19 @@ class AlbumsService {
     return rows[0].id
   }
 
+  async editAlbumCover (id, path) {
+    const query = {
+      text: 'UPDATE albums SET cover = $1 WHERE id = $2 RETURNING id',
+      values: [path, id]
+    }
+
+    const { rowCount } = await this._pool.query(query)
+
+    if (!rowCount) {
+      throw new InvariantError('Failed to update album cover.')
+    }
+  }
+
   async getAlbumById (id) {
     const query = {
       text: `
