@@ -22,9 +22,9 @@ class ExportsHandler {
 
     await this._playlistsService.verifyPlaylistOwnership(playlistId, userId)
 
-    const message = { userId, targetEmail }
+    const message = { userId, targetEmail, playlistId }
 
-    await this._producerService.sendMessage('exports:playlist', JSON.stringify(message))
+    await this._producerService.sendMessage('export:playlist', JSON.stringify(message))
 
     const response = h.response({
       status: 'success',
