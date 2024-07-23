@@ -24,7 +24,32 @@ class AlbumsHandler {
         albumId
       }
     })
+
     response.code(201)
+
+    return response
+  }
+
+  async postAlbumCoverHandler (request, h) {
+    const { data } = request.payload
+
+    this._validator.validateAlbumCoverHeaders(data.hapi.headers)
+
+    const filename = await this._storageService.writeFile(data, data.hapi)
+
+    const path = `http://${config.app.host}:${config.app.port}/albums/covers/${filename}`
+
+    const { id } = request.params
+
+    await this._albumsService.editAlbumCover(id, path)
+
+    const response = h.response({
+      status: 'success',
+      message: 'Album cover uploaded successfully.'
+    })
+
+    response.code(201)
+
     return response
   }
 
@@ -61,29 +86,6 @@ class AlbumsHandler {
       status: 'success',
       message: 'Album deleted successfully.'
     })
-  }
-
-  async postAlbumCoverHandler (request, h) {
-    const { data } = request.payload
-
-    this._validator.validateAlbumCoverHeaders(data.hapi.headers)
-
-    const filename = await this._storageService.writeFile(data, data.hapi)
-
-    const path = `http://${config.app.host}:${config.app.port}/albums/covers/${filename}`
-
-    const { id } = request.params
-
-    await this._albumsService.editAlbumCover(id, path)
-
-    const response = h.response({
-      status: 'success',
-      message: 'Album cover uploaded successfully.'
-    })
-
-    response.code(201)
-
-    return response
   }
 }
 
