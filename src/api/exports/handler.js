@@ -1,8 +1,8 @@
 import autoBind from 'auto-bind'
 
 class ExportsHandler {
-  constructor (exportsService, playlistsService, validator) {
-    this._exportsService = exportsService
+  constructor (producerService, playlistsService, validator) {
+    this._producerService = producerService
 
     this._playlistsService = playlistsService
 
@@ -24,7 +24,7 @@ class ExportsHandler {
 
     const message = { userId, targetEmail }
 
-    await this._exportsService.sendMessage('exports:playlist', JSON.stringify(message))
+    await this._producerService.sendMessage('exports:playlist', JSON.stringify(message))
 
     const response = h.response({
       status: 'success',
