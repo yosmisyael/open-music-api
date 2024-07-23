@@ -30,9 +30,12 @@ import ActivitiesService from './services/ActivitiesService.js'
 import exports from './api/exports/index.js'
 import ProducerService from './services/ProducerService.js'
 import ExportsValidator from './validator/exports/index.js'
+import StorageServices from './services/StorageServices.js'
 config()
 
 const init = async () => {
+  const storageService = new StorageServices()
+
   const albumsService = new AlbumsService()
 
   const songsService = new SongsService()
@@ -92,7 +95,8 @@ const init = async () => {
     {
       plugin: albums,
       options: {
-        service: albumsService,
+        albumsService,
+        storageService,
         validator: AlbumsValidator
       }
     },
