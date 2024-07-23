@@ -34,7 +34,7 @@ import StorageServices from './services/StorageServices.js'
 import path from 'path'
 
 const init = async () => {
-  const storageService = new StorageServices(path.resolve(__dirname, '../storage/images'))
+  const storageService = new StorageServices(path.resolve(process.cwd(), 'storage/images'))
 
   const albumsService = new AlbumsService()
 
