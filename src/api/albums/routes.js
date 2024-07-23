@@ -1,3 +1,5 @@
+import {resolve} from "path";
+
 const routes = (handler) => [
   {
     method: 'POST',
@@ -21,6 +23,15 @@ const routes = (handler) => [
     method: 'GET',
     path: '/albums/{id}',
     handler: handler.getAlbumByIdHandler
+  },
+  {
+    method: 'GET',
+    path: '/albums/covers/{param*}',
+    handler: {
+      directory: {
+        path: resolve(process.cwd(), 'storage/images')
+      }
+    }
   },
   {
     method: 'PUT',
