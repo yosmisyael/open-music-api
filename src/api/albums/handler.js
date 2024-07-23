@@ -1,8 +1,11 @@
 import autoBind from 'auto-bind'
+import config from '../../utils/config.js'
 
 class AlbumsHandler {
-  constructor (service, validator) {
-    this._service = service
+  constructor (albumsService, storageService, validator) {
+    this._albumsService = albumsService
+
+    this._storageService = storageService
 
     this._validator = validator
 
@@ -12,7 +15,7 @@ class AlbumsHandler {
   async postAlbumHandler (request, h) {
     this._validator.validateAlbumPayload(request.payload)
 
-    const albumId = await this._service.addAlbum(request.payload)
+    const albumId = await this._albumsService.addAlbum(request.payload)
 
     const response = h.response({
       status: 'success',
@@ -28,7 +31,7 @@ class AlbumsHandler {
   async getAlbumByIdHandler (request, h) {
     const { id } = request.params
 
-    const album = await this._service.getAlbumById(id)
+    const album = await this._albumsService.getAlbumById(id)
 
     return h.response({
       status: 'success',
@@ -41,7 +44,7 @@ class AlbumsHandler {
 
     const { id } = request.params
 
-    await this._service.editAlbumById(id, request.payload)
+    await this._albumsService.editAlbumById(id, request.payload)
 
     return h.response({
       status: 'success',
@@ -52,12 +55,35 @@ class AlbumsHandler {
   async deleteAlbumByIdHandler (request, h) {
     const { id } = request.params
 
-    await this._service.deleteAlbumById(id)
+    await this._albumsService.deleteAlbumById(id)
 
     return h.response({
       status: 'success',
       message: 'Album deleted successfully.'
     })
+  }
+
+  async postAlbumCoverHandler (request, h) {
+    const { data } = request.payload
+
+    this._validator.validateAlbumCoverHeaders(data.hapi.headers)
+
+    const filename = await this._storageService.writeFile(data, data.hapi)
+
+    const path = `http://${config.app.host}:${config.app.port}/albums/covers/${filename}`
+
+    const { id } = request.params
+
+    await this._albumsService.editAlbumCover(id, path)
+
+    const response = h.response({
+      status: 'success',
+      message: 'Album cover uploaded successfully.'
+    })
+
+    response.code(201)
+
+    return response
   }
 }
 
