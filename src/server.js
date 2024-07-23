@@ -31,9 +31,10 @@ import exports from './api/exports/index.js'
 import ProducerService from './services/ProducerService.js'
 import ExportsValidator from './validator/exports/index.js'
 import StorageServices from './services/StorageServices.js'
+import path from 'path'
 
 const init = async () => {
-  const storageService = new StorageServices()
+  const storageService = new StorageServices(path.resolve(__dirname, '../storage/images'))
 
   const albumsService = new AlbumsService()
 
