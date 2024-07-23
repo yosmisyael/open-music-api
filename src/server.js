@@ -1,4 +1,4 @@
-import { config } from 'dotenv'
+import config from './utils/config.js'
 import { server as HapiServer } from '@hapi/hapi'
 import Jwt from '@hapi/jwt'
 import Inert from '@hapi/inert'
@@ -31,7 +31,6 @@ import exports from './api/exports/index.js'
 import ProducerService from './services/ProducerService.js'
 import ExportsValidator from './validator/exports/index.js'
 import StorageServices from './services/StorageServices.js'
-config()
 
 const init = async () => {
   const storageService = new StorageServices()
@@ -55,8 +54,8 @@ const init = async () => {
   const producerService = new ProducerService()
 
   const server = new HapiServer({
-    port: process.env.PORT,
-    host: process.env.HOST,
+    port: config.app.port,
+    host: config.app.host,
     routes: {
       cors: {
         origin: ['*']
@@ -74,13 +73,13 @@ const init = async () => {
   ])
 
   server.auth.strategy('openmusic_jwt', 'jwt', {
-    keys: process.env.ACCESS_TOKEN_KEY,
+    keys: config.auth.access,
 
     verify: {
       aud: false,
       iss: false,
       sub: false,
-      maxAgeSec: process.env.ACCESS_TOKEN_AGE
+      maxAgeSec: config.auth.age
     },
 
     validate: (artifacts) => ({
