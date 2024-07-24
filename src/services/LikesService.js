@@ -3,8 +3,10 @@ import { nanoid } from 'nanoid'
 import InvariantError from '../exceptions/InvariantError.js'
 
 class LikesService {
-  constructor () {
+  constructor (cacheService) {
     this._pool = pool
+
+    this._cacheService = cacheService
   }
 
   async verifyLike (userId, albumId) {
@@ -33,6 +35,8 @@ class LikesService {
     if (!rowCount) {
       throw new InvariantError('Failed to add like to album.')
     }
+
+    this._cacheService.delete(`likes:${albumId}`)
   }
 
   async countLikes (albumId) {
@@ -43,7 +47,11 @@ class LikesService {
 
     const { rows } = await this._pool.query(query)
 
-    return parseInt(rows[0].count)
+    const parsedResult = parseInt(rows[0].count)
+
+    this._cacheService.set(`likes:${albumId}`, parsedResult)
+
+    return parsedResult
   }
 
   async deleteLike (userId, albumId) {
@@ -57,6 +65,8 @@ class LikesService {
     if (!rowCount) {
       throw new InvariantError('Failed to delete like.')
     }
+
+    this._cacheService.delete(`likes:${albumId}`)
   }
 }
 
