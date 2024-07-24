@@ -1,12 +1,20 @@
 import autoBind from 'auto-bind'
 
 class PlaylistSongsHandler {
-  constructor (playlistsService, playlistSongsService, activitiesService, validator) {
+  constructor (
+    playlistsService,
+    playlistSongsService,
+    activitiesService,
+    cacheService,
+    validator
+  ) {
     this._playlistsService = playlistsService
 
     this._playlistSongsService = playlistSongsService
 
     this._activitiesService = activitiesService
+
+    this._cacheService = cacheService
 
     this._validator = validator
 
@@ -47,12 +55,27 @@ class PlaylistSongsHandler {
 
     await this._playlistsService.verifyPlaylistAccess(playlistId, userId)
 
-    const playlist = await this._playlistSongsService.getPlaylistSongs(playlistId)
+    try {
+      const result = this._cacheService.get(`playlist:${playlistId}`)
 
-    return h.response({
-      status: 'success',
-      data: { playlist }
-    })
+      const playlist = JSON.parse(result)
+
+      const response = h.response({
+        status: 'success',
+        data: { playlist }
+      })
+
+      response.header('X-Data-Source', 'cache')
+
+      return response
+    } catch (error) {
+      const playlist = await this._playlistSongsService.getPlaylistSongs(playlistId)
+
+      return h.response({
+        status: 'success',
+        data: { playlist }
+      })
+    }
   }
 
   async deletePlaylistSongHandler (request, h) {

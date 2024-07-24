@@ -53,7 +53,7 @@ const init = async () => {
 
   const playlistsService = new PlaylistsService(collaborationsService, cacheService)
 
-  const playlistSongsService = new PlaylistSongsService(songsService)
+  const playlistSongsService = new PlaylistSongsService(songsService, cacheService)
 
   const activitiesService = new ActivitiesService()
 
@@ -143,6 +143,7 @@ const init = async () => {
         playlistsService,
         playlistSongsService,
         activitiesService,
+        cacheService,
         validator: PlaylistSongsValidator
       }
     },
