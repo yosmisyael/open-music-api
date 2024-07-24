@@ -49,7 +49,7 @@ const init = async () => {
 
   const authenticationsService = new AuthenticationsService()
 
-  const collaborationsService = new CollaborationsService(usersService)
+  const collaborationsService = new CollaborationsService(usersService, cacheService)
 
   const playlistsService = new PlaylistsService(collaborationsService)
 
