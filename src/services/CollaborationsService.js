@@ -3,10 +3,12 @@ import { nanoid } from 'nanoid'
 import InvariantError from '../exceptions/InvariantError.js'
 
 class CollaborationsService {
-  constructor (usersServiece) {
+  constructor (usersServiece, cacheService) {
     this._pool = pool
 
     this._usersService = usersServiece
+
+    this._cacheService = cacheService
   }
 
   async addCollaboration (playlistId, userId) {
@@ -23,6 +25,8 @@ class CollaborationsService {
       throw new InvariantError('Failed to add collaborator.')
     }
 
+    await this._cacheService.delete(`playlist-${userId}`)
+
     return rows[0].id
   }
 
@@ -37,6 +41,8 @@ class CollaborationsService {
     if (!rowCount) {
       throw new InvariantError('Failed to remove collaborator.')
     }
+
+    await this._cacheService.delete(`playlist-${userId}`)
   }
 
   async verifyCollaborator (playlistId, userId) {
