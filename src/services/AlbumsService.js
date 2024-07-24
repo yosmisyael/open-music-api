@@ -8,6 +8,19 @@ class AlbumsService {
     this._pool = pool
   }
 
+  async verifyAlbumExist (albumId) {
+    const query = {
+      text: 'SELECT id FROM albums WHERE id = $1',
+      values: [albumId]
+    }
+
+    const { rowCount } = await this._pool.query(query)
+
+    if (!rowCount) {
+      throw new NotFoundError('Album not found.')
+    }
+  }
+
   async addAlbum ({ name, year }) {
     const id = `album-${nanoid(16)}`
 
