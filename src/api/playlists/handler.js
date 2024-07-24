@@ -1,8 +1,10 @@
 import autoBind from 'auto-bind'
 
 class PlaylistsHandler {
-  constructor (service, validator) {
-    this._service = service
+  constructor (playlistsService, cacheService, validator) {
+    this._playlistsService = playlistsService
+
+    this._cacheService = cacheService
 
     this._validator = validator
 
@@ -16,7 +18,7 @@ class PlaylistsHandler {
 
     const { name } = request.payload
 
-    const playlistId = await this._service.addPlaylist(name, userId)
+    const playlistId = await this._playlistsService.addPlaylist(name, userId)
 
     const response = h.response({
       status: 'success',
@@ -31,12 +33,27 @@ class PlaylistsHandler {
   async getPlaylistsHandler (request, h) {
     const { id: userId } = request.auth.credentials
 
-    const playlists = await this._service.getPlaylist(userId)
+    try {
+      const result = await this._cacheService.get(`playlist:${userId}`)
 
-    return h.response({
-      status: 'success',
-      data: { playlists }
-    })
+      const playlists = JSON.parse(result)
+
+      const response = h.response({
+        status: 'success',
+        data: { playlists }
+      })
+
+      response.header('X-Data-Source', 'cache')
+
+      return response
+    } catch (error) {
+      const playlists = await this._playlistsService.getPlaylist(userId)
+
+      return h.response({
+        status: 'success',
+        data: { playlists }
+      })
+    }
   }
 
   async deletePlaylistsHandler (request, h) {
@@ -44,9 +61,9 @@ class PlaylistsHandler {
 
     const { id: userId } = request.auth.credentials
 
-    await this._service.verifyPlaylistOwnership(id, userId)
+    await this._playlistsService.verifyPlaylistOwnership(id, userId)
 
-    await this._service.deletePlaylist(id)
+    await this._playlistsService.deletePlaylist(id)
 
     return h.response({
       status: 'success',
