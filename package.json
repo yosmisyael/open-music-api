@@ -1,5 +1,5 @@
 {
-  "name": "open-music-api-v2",
+  "name": "open-music-api",
   "version": "3.0.0",
   "description": "api project for dicoding course submission",
   "main": "src/server.js",
