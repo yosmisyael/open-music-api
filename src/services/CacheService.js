@@ -5,12 +5,16 @@ import NotFoundError from '../exceptions/NotFoundError.js'
 class CacheService {
   constructor () {
     this._client = createClient({
-      socket: config.redis.host
+      socket: {
+        host: config.redis.host
+      }
     })
 
     this._client.on('error', (error) => {
       console.error(error)
     })
+
+    this._client.connect()
   }
 
   async set (key, value, expirationInSeconds = 108000) {
