@@ -25,7 +25,7 @@ class CollaborationsService {
       throw new InvariantError('Failed to add collaborator.')
     }
 
-    await this._cacheService.delete(`playlist-${userId}`)
+    await this._cacheService.delete(`playlist:${userId}`)
 
     return rows[0].id
   }
@@ -42,7 +42,7 @@ class CollaborationsService {
       throw new InvariantError('Failed to remove collaborator.')
     }
 
-    await this._cacheService.delete(`playlist-${userId}`)
+    await this._cacheService.delete(`playlist:${userId}`)
   }
 
   async verifyCollaborator (playlistId, userId) {
