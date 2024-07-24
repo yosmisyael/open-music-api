@@ -33,13 +33,13 @@ import ExportsValidator from './validator/exports/index.js'
 import StorageServices from './services/StorageServices.js'
 import likes from './api/likes/index.js'
 import LikesService from './services/LikesService.js'
-import path from 'path'
+import { resolve } from 'path'
 import CacheService from './services/CacheService.js'
 
 const init = async () => {
   const cacheService = new CacheService()
 
-  const storageService = new StorageServices(path.resolve(process.cwd(), 'storage/images'))
+  const storageService = new StorageServices(resolve(process.cwd(), 'storage/images'))
 
   const albumsService = new AlbumsService()
 
