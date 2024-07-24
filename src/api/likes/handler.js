@@ -16,6 +16,8 @@ class LikesHandler {
 
     const { id: userId } = request.auth.credentials
 
+    await this._likesService.verifyLike(userId, albumId)
+
     await this._likesService.addLike(userId, albumId)
 
     const response = h.response({
