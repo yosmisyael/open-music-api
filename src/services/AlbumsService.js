@@ -96,13 +96,13 @@ class AlbumsService {
       values: [name, year, id]
     }
 
-    const { rows, rowCount } = await this._pool.query(query)
+    const { rowCount } = await this._pool.query(query)
 
     if (!rowCount) {
       throw new NotFoundError('Album not found.')
     }
 
-    await this._cacheService.delete(`album:${rows[0].id}`)
+    await this._cacheService.delete(`album:${id}`)
   }
 
   async deleteAlbumById (id) {
