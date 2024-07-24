@@ -1,10 +1,12 @@
 import autoBind from 'auto-bind'
 
 class LikesHandler {
-  constructor (likesService, albumsService) {
+  constructor (likesService, albumsService, cacheService) {
     this._likesService = likesService
 
     this._albumsService = albumsService
+
+    this._cacheService = cacheService
 
     autoBind(this)
   }
@@ -35,12 +37,27 @@ class LikesHandler {
 
     await this._albumsService.verifyAlbumExist(albumId)
 
-    const likes = await this._likesService.countLikes(albumId)
+    try {
+      const result = await this._cacheService.get(`likes:${albumId}`)
 
-    return h.response({
-      status: 'success',
-      data: { likes }
-    })
+      const parsedResult = JSON.parse(result)
+
+      const response = h.response({
+        status: 'success',
+        data: { likes: parsedResult }
+      })
+
+      response.header('X-Data-Source', 'cache')
+
+      return response
+    } catch (error) {
+      const likes = await this._likesService.countLikes(albumId)
+
+      return h.response({
+        status: 'success',
+        data: { likes }
+      })
+    }
   }
 
   async deleteLikeHandler (request, h) {
