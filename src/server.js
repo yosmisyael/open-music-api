@@ -51,7 +51,7 @@ const init = async () => {
 
   const collaborationsService = new CollaborationsService(usersService, cacheService)
 
-  const playlistsService = new PlaylistsService(collaborationsService)
+  const playlistsService = new PlaylistsService(collaborationsService, cacheService)
 
   const playlistSongsService = new PlaylistSongsService(songsService)
 

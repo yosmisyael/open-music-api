@@ -5,10 +5,12 @@ import NotFoundError from '../exceptions/NotFoundError.js'
 import AuthorizationError from '../exceptions/AuthorizationError.js'
 
 class PlaylistsService {
-  constructor (collaborationsService) {
+  constructor (collaborationsService, cacheService) {
     this._pool = pool
 
     this._collaborationsService = collaborationsService
+
+    this._cacheService = cacheService
   }
 
   async addPlaylist (name, owner) {
@@ -24,6 +26,8 @@ class PlaylistsService {
     if (!rowCount) {
       throw new InvariantError('Failed to add new playlist.')
     }
+
+    await this._cacheService.delete(`playlist:${owner}`)
 
     return rows[0].id
   }
@@ -42,20 +46,24 @@ class PlaylistsService {
 
     const { rows } = await this._pool.query(query)
 
+    await this._cacheService.set(`playlist:${owner}`, JSON.stringify(rows))
+
     return rows
   }
 
   async deletePlaylist (id) {
     const query = {
-      text: 'DELETE FROM playlists WHERE id = $1 RETURNING id',
+      text: 'DELETE FROM playlists WHERE id = $1 RETURNING owner',
       values: [id]
     }
 
-    const { rowCount } = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
     if (!rowCount) {
       throw new NotFoundError('Playlist not found.')
     }
+
+    await this._cacheService.delete(`playlist:${rows[0].owner}`)
   }
 
   async verifyPlaylistOwnership (id, owner) {
