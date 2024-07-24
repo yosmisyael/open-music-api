@@ -1,8 +1,10 @@
 import autoBind from 'auto-bind'
 
 class LikesHandler {
-  constructor (service) {
-    this._service = service
+  constructor (likesService, albumsService) {
+    this._likesService = likesService
+
+    this._albumsService = albumsService
 
     autoBind(this)
   }
@@ -10,9 +12,11 @@ class LikesHandler {
   async postLikeHandler (request, h) {
     const { id: albumId } = request.params
 
+    await this._albumsService.verifyAlbumExist(albumId)
+
     const { id: userId } = request.auth.credentials
 
-    await this._service.addLike(userId, albumId)
+    await this._likesService.addLike(userId, albumId)
 
     const response = h.response({
       status: 'success',
@@ -27,7 +31,9 @@ class LikesHandler {
   async getLikesHandler (request, h) {
     const { id: albumId } = request.params
 
-    const likes = await this._service.countLikes(albumId)
+    await this._albumsService.verifyAlbumExist(albumId)
+
+    const likes = await this._likesService.countLikes(albumId)
 
     return h.response({
       status: 'success',
@@ -38,9 +44,11 @@ class LikesHandler {
   async deleteLikeHandler (request, h) {
     const { id: albumId } = request.params
 
+    await this._albumsService.verifyAlbumExist(albumId)
+
     const { id: userId } = request.auth.credentials
 
-    await this._service.deleteLike(userId, albumId)
+    await this._likesService.deleteLike(userId, albumId)
 
     return h.response({
       status: 'success',

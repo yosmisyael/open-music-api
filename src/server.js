@@ -168,7 +168,8 @@ const init = async () => {
     {
       plugin: likes,
       options: {
-        service: likesService
+        likesService,
+        albumsService
       }
     }
   ])
