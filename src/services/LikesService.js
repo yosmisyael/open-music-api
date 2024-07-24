@@ -41,9 +41,9 @@ class LikesService {
       values: [albumId]
     }
 
-    const { rowCount } = await this._pool.query(query)
+    const { rows } = await this._pool.query(query)
 
-    return rowCount
+    return parseInt(rows[0].count)
   }
 
   async deleteLike (userId, albumId) {
