@@ -4,8 +4,8 @@ import routes from './routes.js'
 export default {
   name: 'songs',
   version: '1.0.0',
-  register: async (server, { songsService, cacheService, validator }) => {
-    const songsHandler = new SongsHandler(songsService, cacheService, validator)
+  register: async (server, { service, validator }) => {
+    const songsHandler = new SongsHandler(service, validator)
 
     server.route(routes(songsHandler))
   }

@@ -1,10 +1,8 @@
 import autoBind from 'auto-bind'
 
 class SongsHandler {
-  constructor (songsService, cacheService, validator) {
-    this._songsService = songsService
-
-    this._cacheService = cacheService
+  constructor (service, validator) {
+    this._service = service
 
     this._validator = validator
 
@@ -14,7 +12,7 @@ class SongsHandler {
   async postSongHandler (request, h) {
     this._validator.validateSongPayload(request.payload)
 
-    const songId = await this._songsService.addSong(request.payload)
+    const songId = await this._service.addSong(request.payload)
 
     const response = h.response({
       status: 'success',
@@ -31,33 +29,18 @@ class SongsHandler {
 
     await this._validator.validateSongQuery({ title, performer })
 
-    try {
-      const result = await this._cacheService.get('songs')
+    const songs = await this._service.getSongs({ title, performer })
 
-      const songs = JSON.parse(result)
-
-      const response = h.response({
-        status: 'success',
-        data: { songs }
-      })
-
-      response.header('X-Data-Source', 'cache')
-
-      return response
-    } catch (error) {
-      const songs = await this._songsService.getSongs({ title, performer })
-
-      return h.response({
-        status: 'success',
-        data: { songs }
-      })
-    }
+    return h.response({
+      status: 'success',
+      data: { songs }
+    })
   }
 
   async getSongByIdHandler (request, h) {
     const { id } = request.params
 
-    const song = await this._songsService.getSongById(id)
+    const song = await this._service.getSongById(id)
 
     return h.response({
       status: 'success',
@@ -70,7 +53,7 @@ class SongsHandler {
 
     const { id } = request.params
 
-    await this._songsService.editSongById(id, request.payload)
+    await this._service.editSongById(id, request.payload)
 
     return h.response({
       status: 'success',
@@ -81,7 +64,7 @@ class SongsHandler {
   async deleteSongByIdHandler (request, h) {
     const { id } = request.params
 
-    await this._songsService.deleteSongById(id)
+    await this._service.deleteSongById(id)
 
     return h.response({
       status: 'success',

@@ -4,10 +4,8 @@ import { nanoid } from 'nanoid'
 import NotFoundError from '../exceptions/NotFoundError.js'
 
 class SongsService {
-  constructor (cacheService) {
+  constructor () {
     this._pool = pool
-
-    this._cacheService = cacheService
   }
 
   async addSong ({ title, year, genre, performer, duration, albumId }) {
@@ -24,8 +22,6 @@ class SongsService {
       throw new InvariantError('Failed to add new song.')
     }
 
-    await this._cacheService.delete('songs')
-
     return rows[0].id
   }
 
@@ -36,8 +32,6 @@ class SongsService {
     }
 
     const { rows } = await this._pool.query(query)
-
-    await this._cacheService.set('songs', JSON.stringify(rows))
 
     return rows
   }
@@ -68,8 +62,6 @@ class SongsService {
     if (!rowCount) {
       throw new NotFoundError('Song not found.')
     }
-
-    await this._cacheService.delete('songs')
   }
 
   async deleteSongById (id) {
@@ -83,8 +75,6 @@ class SongsService {
     if (!rowCount) {
       throw new NotFoundError('Song not found.')
     }
-
-    await this._cacheService.delete('songs')
   }
 }
 
