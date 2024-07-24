@@ -2,10 +2,12 @@ import autoBind from 'auto-bind'
 import config from '../../utils/config.js'
 
 class AlbumsHandler {
-  constructor (albumsService, storageService, validator) {
+  constructor (albumsService, storageService, cacheService, validator) {
     this._albumsService = albumsService
 
     this._storageService = storageService
+
+    this._cacheService = cacheService
 
     this._validator = validator
 
@@ -56,12 +58,27 @@ class AlbumsHandler {
   async getAlbumByIdHandler (request, h) {
     const { id } = request.params
 
-    const album = await this._albumsService.getAlbumById(id)
+    try {
+      const result = await this._cacheService.get(`album:${id}`)
 
-    return h.response({
-      status: 'success',
-      data: { album }
-    })
+      const album = JSON.parse(result)
+
+      const response = h.response({
+        status: 'success',
+        data: { album }
+      })
+
+      response.header('X-Data-Source', 'cache')
+
+      return response
+    } catch (error) {
+      const album = await this._albumsService.getAlbumById(id)
+
+      return h.response({
+        status: 'success',
+        data: { album }
+      })
+    }
   }
 
   async putAlbumByIdHandler (request, h) {

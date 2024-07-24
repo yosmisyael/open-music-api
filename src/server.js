@@ -41,7 +41,7 @@ const init = async () => {
 
   const storageService = new StorageServices(resolve(process.cwd(), 'storage/images'))
 
-  const albumsService = new AlbumsService()
+  const albumsService = new AlbumsService(cacheService)
 
   const songsService = new SongsService()
 
@@ -104,6 +104,7 @@ const init = async () => {
       options: {
         albumsService,
         storageService,
+        cacheService,
         validator: AlbumsValidator
       }
     },

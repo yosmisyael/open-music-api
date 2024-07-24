@@ -4,8 +4,10 @@ import InvariantError from '../exceptions/InvariantError.js'
 import NotFoundError from '../exceptions/NotFoundError.js'
 
 class AlbumsService {
-  constructor () {
+  constructor (cacheService) {
     this._pool = pool
+
+    this._cacheService = cacheService
   }
 
   async verifyAlbumExist (albumId) {
@@ -35,6 +37,8 @@ class AlbumsService {
       throw new InvariantError('Failed to add new album.')
     }
 
+    await this._cacheService.delete(`album:${rows[0].id}`)
+
     return rows[0].id
   }
 
@@ -44,11 +48,13 @@ class AlbumsService {
       values: [path, id]
     }
 
-    const { rowCount } = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
     if (!rowCount) {
       throw new InvariantError('Failed to update album cover.')
     }
+
+    await this._cacheService.delete(`album:${rows[0].id}`)
   }
 
   async getAlbumById (id) {
@@ -79,6 +85,8 @@ class AlbumsService {
       throw new NotFoundError('Album not found.')
     }
 
+    await this._cacheService.set(`album:${rows[0].id}`, JSON.stringify(rows[0]))
+
     return rows[0]
   }
 
@@ -88,11 +96,13 @@ class AlbumsService {
       values: [name, year, id]
     }
 
-    const { rows } = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Album not found.')
     }
+
+    await this._cacheService.delete(`album:${rows[0].id}`)
   }
 
   async deleteAlbumById (id) {
@@ -101,11 +111,13 @@ class AlbumsService {
       values: [id]
     }
 
-    const { rows } = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query)
 
-    if (!rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Album not found.')
     }
+
+    await this._cacheService.delete(`album:${rows[0].id}`)
   }
 }
 
