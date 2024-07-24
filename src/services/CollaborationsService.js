@@ -3,10 +3,10 @@ import { nanoid } from 'nanoid'
 import InvariantError from '../exceptions/InvariantError.js'
 
 class CollaborationsService {
-  constructor (usersServiece, cacheService) {
+  constructor (usersService, cacheService) {
     this._pool = pool
 
-    this._usersService = usersServiece
+    this._usersService = usersService
 
     this._cacheService = cacheService
   }
