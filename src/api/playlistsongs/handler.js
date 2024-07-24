@@ -56,7 +56,7 @@ class PlaylistSongsHandler {
     await this._playlistsService.verifyPlaylistAccess(playlistId, userId)
 
     try {
-      const result = this._cacheService.get(`playlist:${playlistId}`)
+      const result = await this._cacheService.get(`playlist:${playlistId}`)
 
       const playlist = JSON.parse(result)
 
