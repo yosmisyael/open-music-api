@@ -43,7 +43,7 @@ const init = async () => {
 
   const albumsService = new AlbumsService(cacheService)
 
-  const songsService = new SongsService()
+  const songsService = new SongsService(cacheService)
 
   const usersService = new UsersService()
 
@@ -111,7 +111,8 @@ const init = async () => {
     {
       plugin: songs,
       options: {
-        service: songsService,
+        songsService,
+        cacheService,
         validator: SongValidator
       }
     },
