@@ -31,6 +31,8 @@ import exports from './api/exports/index.js'
 import ProducerService from './services/ProducerService.js'
 import ExportsValidator from './validator/exports/index.js'
 import StorageServices from './services/StorageServices.js'
+import likes from './api/likes/index.js'
+import LikesService from './services/LikesService.js'
 import path from 'path'
 
 const init = async () => {
@@ -53,6 +55,8 @@ const init = async () => {
   const activitiesService = new ActivitiesService()
 
   const producerService = new ProducerService()
+
+  const likesService = new LikesService()
 
   const server = new HapiServer({
     port: config.app.port,
@@ -159,6 +163,12 @@ const init = async () => {
         producerService,
         playlistsService,
         validator: ExportsValidator
+      }
+    },
+    {
+      plugin: likes,
+      options: {
+        service: likesService
       }
     }
   ])
