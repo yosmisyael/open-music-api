@@ -41,7 +41,7 @@ class PlaylistSongsService {
                                             'title', songs.title,
                                             'performer', songs.performer
                                     )
-                            ),
+                            ) FILTER (WHERE songs.id IS NOT NULL),
                             '[]'::json
                     ) AS songs
              FROM playlists
